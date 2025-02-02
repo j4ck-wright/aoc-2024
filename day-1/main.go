@@ -20,20 +20,18 @@ func sumOfSlice(s []int) int {
 	return n
 }
 
-func calcRepeatedNumber(n int, s []int) int {
-	ctr := 0
+func frequencyMap(s []int) map[int]int {
+	fm := make(map[int]int)
 	for i := 0; i < len(s); i++ {
-		if s[i] == n {
-			ctr++
-		}
+		fm[s[i]]++
 	}
 
-	return ctr
+	return fm
 }
 
 func main() {
 
-	input, err := os.Open("day-1/input.tx")
+	input, err := os.Open("day-1/input.txt")
 
 	if err != nil {
 		log.Fatalf("Error opening file: %v", err)
@@ -59,8 +57,11 @@ func main() {
 	sort.Ints(listLeft)
 	sort.Ints(listRight)
 
+	rightFreqMap := frequencyMap(listRight)
+
 	for i := 0; i < len(listLeft); i++ {
-		distance := listLeft[i] - listRight[i]
+		num := listLeft[i]
+		distance := num - listRight[i]
 
 		// +ve distance
 		if distance < 0 {
@@ -68,8 +69,8 @@ func main() {
 		}
 
 		distancesApart = append(distancesApart, distance)
-		occurances := calcRepeatedNumber(listLeft[i], listRight)
-		similarityScore = similarityScore + (listLeft[i] * occurances)
+		occurances := rightFreqMap[num]
+		similarityScore += (num * occurances)
 
 	}
 
